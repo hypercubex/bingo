@@ -41,8 +41,8 @@ export default function HostPage() {
     <div className="min-h-screen bg-[#FBFBFA] text-[#111111] font-sans antialiased px-6 py-12 md:px-16">
       {/* Header */}
       <header className="border-b border-black pb-6 mb-12 text-center md:text-left tracking-widest uppercase">
-        <h1 className="text-3xl font-light">LANE CRAWFORD STYLE BINGO</h1>
-        <p className="text-xs text-gray-500 mt-2">Master Host Console</p>
+        <h1 className="text-3xl font-light">BINGO</h1>
+        <p className="text-xs text-gray-500 mt-2">Host</p>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
