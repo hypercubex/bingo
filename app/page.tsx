@@ -64,8 +64,8 @@ export default function PlayerPage() {
     <div className="min-h-screen bg-[#FBFBFA] text-[#111111] font-sans antialiased px-4 py-12 md:px-16 flex flex-col items-center">
       {/* Brand Header */}
       <header className="border-b border-black pb-4 mb-10 w-full max-w-xl text-center tracking-widest uppercase">
-        <h1 className="text-2xl font-light">LANE CRAWFORD</h1>
-        <p className="text-[10px] text-gray-500 mt-1">Guest Bingo Pass</p>
+        <h1 className="text-2xl font-light">Bingo</h1>
+        <p className="text-[10px] text-gray-500 mt-1">Guest Pass</p>
       </header>
 
       {/* Bingo Grid Container */}
