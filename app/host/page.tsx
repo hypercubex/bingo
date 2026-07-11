@@ -15,11 +15,11 @@ export default function HostPage() {
   useEffect(() => {
     setAvailablePool(bingoData.items);
 
-    // Parse Title out of URL Hash
+    // Parse Custom Title directly out of URL Hash Fragment
     if (typeof window !== "undefined") {
       const hash = window.location.hash.replace("#", "");
       if (hash) {
-        setGameTitle(decodeURIComponent(hash));
+        setGameTitle(decodeURIComponent(hash).toUpperCase());
       }
     }
   }, []);
@@ -47,11 +47,16 @@ export default function HostPage() {
 
   return (
     <div className="min-h-screen bg-[#FBFBFA] text-[#111111] font-sans antialiased px-6 py-12 md:px-16">
+      {/* Fully Customized Dynamic Header */}
       <header className="border-b border-black pb-6 mb-12 text-center md:text-left tracking-widest uppercase">
-        <h1 className="text-3xl font-light">{gameTitle} HOST</h1>
+        <h1 className="text-3xl font-light tracking-[0.1em] text-black">
+          {gameTitle} <span className="font-medium text-gray-400">HOST</span>
+        </h1>
+        <p className="text-[10px] text-gray-400 tracking-wider mt-2">Master Game Control Interface</p>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-7xl mx-auto">
+        {/* Left Control Panel */}
         <div className="lg:col-span-1 flex flex-col justify-between border border-black p-8 bg-white h-[400px] shadow-sm">
           <div>
             <span className="text-[10px] uppercase tracking-widest text-gray-400 block mb-4 font-semibold">Now Calling</span>
@@ -78,6 +83,7 @@ export default function HostPage() {
           </div>
         </div>
 
+        {/* Right Master Grid Matrix */}
         <div className="lg:col-span-2">
           <h2 className="text-[10px] uppercase tracking-widest mb-4 font-semibold text-gray-400">Master Registry Matrix</h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
