@@ -52,7 +52,7 @@ export default function HostPage() {
         <h1 className="text-3xl font-light tracking-[0.1em] text-black">
           {gameTitle} <span className="font-medium text-gray-400">HOST</span>
         </h1>
-        <p className="text-[10px] text-gray-400 tracking-wider mt-2">Master Game Control Interface</p>
+        <p className="text-[10px] text-gray-400 tracking-wider mt-2">Experience Curator Console</p>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-7xl mx-auto">
