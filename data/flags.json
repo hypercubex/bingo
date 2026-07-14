@@ -1,0 +1,13 @@
+{
+  "id": "world_cup",
+  "label": "World Cup Flags",
+  "previewChar": "⚽",
+  "markers": [
+    "us", "mx", "ca", "ar", "br", "fr", "es", "gb-eng",
+    "it", "de", "pt", "nl", "hr", "be", "uy", "jp",
+    "kr", "ma", "sn", "co", "ec", "py", "pe", "cl",
+    "ch", "at", "pl", "se", "no", "ua", "cz", "tr",
+    "dk", "ir", "sa", "au", "nz", "dz", "eg", "ng",
+    "cm", "gh", "ci", "za", "qa", "iq", "uz", "jo"
+  ]
+}
