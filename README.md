@@ -7,18 +7,37 @@ An elegant, minimalist, editorial-style Bingo application built with Next.js (Ap
 ## 🛠️ Project Structure Overview
 
 ```text
-├── app/
-│   ├── layout.tsx       # Root layout configuration
-│   ├── page.tsx         # Player Page (Static Link / Root)
-│   └── host/
-│       └── page.tsx     # Host Page (Master Console)
-├── data/
-│   └── items.json       # Source JSON containing your words or numbers
-├── types/
-│   └── bingo.ts         # TypeScript interface declarations
-├── public/              # Static assets
-├── tailwind.config.ts   # Tailwind configuration
-└── package.json         # Project configuration & dependencies
+├── components/           # Reusable UI Components (Outside app/)
+│   ├── BingoBoard.tsx    # Shared Player Board logic
+│   └── HostDashboard.tsx # Unified Host Presenter logic
+│
+├── hooks/                # Custom React Hooks
+│   └── useCustomTitle.ts # Real-time URL Hash to page title parser
+│
+├── app/                  # Next.js Directory Routing (Strictly Routes)
+│   ├── layout.tsx        # Global CSS & HTML wrapping
+│   ├── page.tsx          # Player Board: Default (Words)
+│   │
+│   ├── host/
+│   │   └── page.tsx      # Unified Host Controller page
+│   │
+│   ├── mahjong/
+│   │   └── page.tsx      # Player Board: Mahjong Tiles
+│   │
+│   ├── chinese/
+│   │   └── page.tsx      # Player Board: Traditional Chinese (3x3)
+│   │
+│   └── flags/
+│       └── page.tsx      # Player Board: World Cup Flags
+│
+├── data/                 # JSON configuration sets
+│   ├── words.json
+│   ├── mahjong.json
+│   ├── chinese.json
+│   └── flags.json
+│
+├── public/               # Static assets
+└── package.json
 ```
 
 ## 🚀 Getting Started
@@ -43,30 +62,17 @@ Open http://localhost:3000 in your web browser:
 - Player View: http://localhost:3000
 - Host View: http://localhost:3000/host
 
-## ⚙️ Game Configuration & Customization
+## ⚙️ How to Visit & Customize Boards
 
-To change the items, words, or numbers generated inside the cards, simply open data/items.json and replace the array strings.
+You can change the displayed game name instantly using URL hashes.
+Placing text after a # sign in your browser address bar replaces the generic titles on both player and host pages.
 
-⚠️ Important: To cleanly populate a standard $5 \times 5$ Bingo grid, you must include a minimum of 25 unique items in the array.
+💡 Tip: Replace spaces with underscores (_) in your URL hash; the app automatically formats them back into readable titles.
 
-```json
-{
-  "items": [
-    "Luxury", "Elegance", "Couture", "Chic", "Avant-Garde",
-    "Modern", "Minimalist", "Vogue", "Runway", "Atelier",
-    "Tailored", "Silk", "Cashmere", "Velvet", "Monochrome",
-    "Sleek", "Premium", "Curated", "Aesthetic", "Heritage",
-    "Bespoke", "Artisanal", "Sophisticated", "Timeless", "Statement"
-  ]
-}
-```
 
-## 📦 Building for Production
-
-When you are ready to prepare your application for web hosting, run the production build routine:
-
-```bash
-npm run build
-```
-
-This compiles your static components, optimizes server side parameters, builds the structural paths, and generates a .next folder optimized for live performance.
+| Game Mode	| Player Board URL | Host Presenter URL |
+| :--- | :---: | ---: |
+| Default Words |	http://localhost:3000/#Classroom_Fun	| http://localhost:3000/host/#Classroom_Fun|
+Mahjong Tiles |	http://localhost:3000/mahjong/#Friday_Night_Rumble	| http://localhost:3000/host/#Friday_Night_Rumble |
+Chinese	| http://localhost:3000/chinese/#Vocabulary_Quiz	| http://localhost:3000/host/#Vocabulary_Quiz |
+Flags	| http://localhost:3000/flags/#World_Cup_Trivia	| http://localhost:3000/host/#World_Cup_Trivia |
