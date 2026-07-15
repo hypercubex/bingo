@@ -8,6 +8,7 @@ const CARD_PREFIX = "bingo_card_";
 const CARD_TIME_PREFIX = "bingo_card_time_";
 const SELECTIONS_PREFIX = "bingo_selections_";
 const ONE_HOUR = 60 * 60 * 1000;
+const GRID_SIZE = 25; // Locked to 5x5 for all sets
 
 interface BingoBoardProps {
   activeSet: BingoSymbolSet;
@@ -22,7 +23,6 @@ export default function BingoBoard({ activeSet }: BingoBoardProps) {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const isChineseSet = activeSet.id === "chinese_phonetic";
-  const gridSize = isChineseSet ? 9 : 25;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -46,13 +46,13 @@ export default function BingoBoard({ activeSet }: BingoBoardProps) {
     }
 
     // Reuse existing card if generated within the hour
-    if (parsedCard.length === gridSize && savedTime && now - parseInt(savedTime, 10) < ONE_HOUR) {
+    if (parsedCard.length === GRID_SIZE && savedTime && now - parseInt(savedTime, 10) < ONE_HOUR) {
       setCard(parsedCard);
     } else {
       const itemsToShuffle = activeSet.markers || [];
       const shuffled = [...itemsToShuffle]
         .sort(() => 0.5 - Math.random())
-        .slice(0, gridSize);
+        .slice(0, GRID_SIZE);
 
       localStorage.setItem(cacheKey, JSON.stringify(shuffled));
       localStorage.setItem(cacheTimeKey, now.toString());
@@ -71,7 +71,7 @@ export default function BingoBoard({ activeSet }: BingoBoardProps) {
     }
 
     setIsLoaded(true);
-  }, [activeSet, gridSize]);
+  }, [activeSet]);
 
   const toggleCell = (index: number): void => {
     let updated: number[];
@@ -116,17 +116,15 @@ export default function BingoBoard({ activeSet }: BingoBoardProps) {
         {/* Board Container */}
         <main className="bg-white border border-black p-4 sm:p-8 shadow-sm">
 
-          {/* Classic Bingo letters shown except on 3x3 layout */}
-          {!isChineseSet && (
-            <div className="grid grid-cols-5 gap-1 mb-6 text-center text-xs font-bold tracking-[0.4em] opacity-30 select-none">
-              {["B", "I", "N", "G", "O"].map((l) => (
-                <div key={l}>{l}</div>
-              ))}
-            </div>
-          )}
+          {/* Classic Bingo letters header */}
+          <div className="grid grid-cols-5 gap-1 mb-6 text-center text-xs font-bold tracking-[0.4em] opacity-30 select-none">
+            {["B", "I", "N", "G", "O"].map((l) => (
+              <div key={l}>{l}</div>
+            ))}
+          </div>
 
-          {/* Grid Layout */}
-          <div className={`grid gap-2.5 ${isChineseSet ? "grid-cols-3" : "grid-cols-5"}`}>
+          {/* Grid Layout (Uniform 5x5 Grid) */}
+          <div className="grid grid-cols-5 gap-2.5">
             {card.map((item, index) => {
               const isSelected = selectedCells.includes(index);
 
@@ -134,7 +132,7 @@ export default function BingoBoard({ activeSet }: BingoBoardProps) {
                 <button
                   key={index}
                   onClick={() => toggleCell(index)}
-                  className={`aspect-square relative flex items-center justify-center border p-2 text-center transition-all duration-300 cursor-pointer outline-none select-none ${
+                  className={`aspect-square relative flex items-center justify-center border p-1 text-center transition-all duration-300 cursor-pointer outline-none select-none ${
                     isSelected
                       ? "bg-black text-white border-black font-semibold"
                       : "bg-white text-black border-gray-100 hover:border-black"
@@ -142,7 +140,7 @@ export default function BingoBoard({ activeSet }: BingoBoardProps) {
                 >
                   {activeSet.id === "world_cup" ? (
                     /* World Cup Flags Render */
-                    <div className="w-full h-full flex flex-col items-center justify-center p-1">
+                    <div className="w-full h-full flex flex-col items-center justify-center p-0.5">
                       <img
                         src={`https://flagcdn.com/w80/${item}.png`}
                         alt="Flag"
@@ -156,17 +154,17 @@ export default function BingoBoard({ activeSet }: BingoBoardProps) {
                       )}
                     </div>
                   ) : isChineseSet ? (
-                    /* Traditional Chinese View */
-                    <div className="flex flex-col items-center justify-center h-full w-full gap-1">
+                    /* Highly Legible Chinese 5x5 layout adjustments */
+                    <div className="flex flex-col items-center justify-center h-full w-full gap-0.5">
                       <span className={`
                         font-bold leading-none block transition-all
-                        ${isSelected ? "text-red-500 scale-110" : "text-black"}
-                        text-3xl sm:text-5xl
+                        ${isSelected ? "text-red-500 scale-105" : "text-black"}
+                        text-2xl sm:text-3xl
                       `}>
                         {item.split(" ")[0]}
                       </span>
                       <span className={`
-                        font-mono tracking-normal leading-tight block text-[10px] sm:text-xs
+                        font-mono tracking-tight leading-tight block text-[8px] sm:text-[10px]
                         ${isSelected ? "text-white/60" : "text-gray-400"}
                       `}>
                         {item.substring(item.indexOf(" ") + 1)}
@@ -177,8 +175,8 @@ export default function BingoBoard({ activeSet }: BingoBoardProps) {
                     <span
                       className={`
                         leading-tight transition-all duration-300 break-words px-0.5
-                        ${activeSet.id === "mahjong" ? "text-3xl sm:text-4xl font-mono" : ""}
-                        ${activeSet.id === "words" ? "text-[9px] sm:text-[11px] uppercase" : ""}
+                        ${activeSet.id === "mahjong" ? "text-2xl sm:text-3xl font-mono" : ""}
+                        ${activeSet.id === "words" ? "text-[8px] sm:text-[10px] uppercase" : ""}
                         ${isSelected ? "opacity-30 line-through" : "opacity-100"}
                       `}
                     >
