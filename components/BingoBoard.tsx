@@ -1,21 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useSecuredBingo } from "@/hooks/useSecuredBingo";
 import { useCustomTitle } from "@/hooks/useCustomTitle";
 import { BingoSymbolSet } from "@/types/bingo";
-
-const CARD_PREFIX = "bingo_card_";
-const CARD_TIME_PREFIX = "bingo_card_time_";
-const SELECTIONS_PREFIX = "bingo_selections_";
-const ONE_HOUR = 60 * 60 * 1000;
-const GRID_SIZE = 25; // Locked to 5x5 for all sets
+import CheatAlert from "@/components/CheatAlert";
+import BingoCell from "@/components/BingoCell";
 
 interface BingoBoardProps {
   activeSet: BingoSymbolSet;
 }
 
 export default function BingoBoard({ activeSet }: BingoBoardProps) {
-  // Pull custom title with fallback to standard "BINGO"
   const pageTitle = useCustomTitle("BINGO");
 
   const [card, setCard] = useState<string[]>([]);
@@ -104,6 +99,7 @@ export default function BingoBoard({ activeSet }: BingoBoardProps) {
     }
   };
 
+  // 2. Loading State Fallback
   if (!isLoaded || card.length === 0) {
     return (
       <div className="min-h-screen bg-[#FBFBFA] flex items-center justify-center">
@@ -140,7 +136,7 @@ export default function BingoBoard({ activeSet }: BingoBoardProps) {
               const isSelected = selectedCells.includes(index);
 
               return (
-                <button
+                <BingoCell
                   key={index}
                   onClick={() => {
                     toggleCell(index);
