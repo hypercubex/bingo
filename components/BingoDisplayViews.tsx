@@ -22,7 +22,7 @@ export function BingoDisplayViews({ activeSet, lastCalled }: BingoDisplayViewsPr
               alt="Flag"
               className="w-full max-w-[1200px] h-auto max-h-[500px] object-contain shadow-2xl border-2 border-black rounded"
             />
-            <span className="text-6xl sm:text-8xl uppercase tracking-widest font-mono font-black text-black">
+            <span className="text-6xl sm:text-8xl uppercase tracking-widest font-mono text-black">
               {lastCalled.toUpperCase()}
             </span>
           </div>
@@ -38,7 +38,7 @@ export function BingoDisplayViews({ activeSet, lastCalled }: BingoDisplayViewsPr
         ) : (
           <div className="flex items-center justify-center w-full h-full">
             <h2
-              className={`font-black tracking-tight text-black break-words leading-none select-none ${
+              className={`tracking-tight text-black break-words leading-none select-none ${
                 activeSet.id === "mahjong"
                   ? "text-[26rem] sm:text-[34rem]"
                   : "text-9xl sm:text-[20rem]"
