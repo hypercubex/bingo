@@ -7,37 +7,24 @@ An elegant, minimalist, editorial-style Bingo application built with Next.js (Ap
 ## 🛠️ Project Structure Overview
 
 ```text
-├── components/           # Reusable UI Components (Outside app/)
-│   ├── BingoBoard.tsx    # Shared Player Board logic
-│   └── HostDashboard.tsx # Unified Host Presenter logic
+bingo/
+├── 🧪 hooks/
+│   ├── useSecuredBingo.ts         # Secure state management, signature verification, & anti-cheat engine
+│   └── useSecuredBingo.test.tsx    # Comprehensive Vitest suite (localStorage, cryptographic validation, DOM testing)
 │
-├── hooks/                # Custom React Hooks
-│   └── useCustomTitle.ts # Real-time URL Hash to page title parser
+├── 🧱 components/
+│   ├── BingoBoard.tsx             # Game dashboard container (manages grid layouts, header controls, & reset states)
+│   ├── BingoCell.tsx              # Pure visual grid cell (handles multi-language layouts, image lazy-loading, & active states)
+│   └── CheatAlert.tsx             # Interactive lockdown screen indicating remaining penalty lockout time
 │
-├── app/                  # Next.js Directory Routing (Strictly Routes)
-│   ├── layout.tsx        # Global CSS & HTML wrapping
-│   ├── page.tsx          # Player Board: Default (Words)
-│   │
-│   ├── host/
-│   │   └── page.tsx      # Unified Host Controller page
-│   │
-│   ├── mahjong/
-│   │   └── page.tsx      # Player Board: Mahjong Tiles
-│   │
-│   ├── chinese/
-│   │   └── page.tsx      # Player Board: Traditional Chinese (3x3)
-│   │
-│   └── flags/
-│       └── page.tsx      # Player Board: World Cup Flags
+├── 🏷️ types/
+│   └── bingo.ts                   # Unified TypeScript definitions for symbol sets and configurations
 │
-├── data/                 # JSON configuration sets
-│   ├── words.json
-│   ├── mahjong.json
-│   ├── chinese.json
-│   └── flags.json
-│
-├── public/               # Static assets
-└── package.json
+├── ⚙️ Config Files
+│   ├── next.config.js             # Consolidated Next.js build setup (optimized for Next 12/14 pipelines)
+│   ├── vitest.config.ts           # Vitest unit test environment configuration (runs JSDOM & fast SWC)
+│   └── package.json               # Defined framework and testing dependencies
+└── README.md                      # Project documentation and guidelines
 ```
 
 ## 🚀 Getting Started
