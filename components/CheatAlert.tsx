@@ -8,7 +8,9 @@ interface CheatAlertProps {
 export default function CheatAlert({ timeRemainingMs }: CheatAlertProps) {
   // Format milliseconds into MM:SS format
   const formatTime = (ms: number) => {
-    if (ms <= 0) return "00:00";
+    if (ms <= 0) {
+      return "00:00";
+    }
     const totalSeconds = Math.floor(ms / 1000);
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;

@@ -89,10 +89,12 @@ export default function HostDashboard() {
         );
       } catch {
         setCalledItems([]);
+        setLastCalled(null);
         setRemainingItems(allMarkers);
       }
     } else {
       setCalledItems([]);
+      setLastCalled(null);
       setRemainingItems(allMarkers);
     }
 
@@ -103,6 +105,10 @@ export default function HostDashboard() {
   const handleSelectTab = (key: string) => {
     if (activeSetKey !== key) {
       resetTimer();
+      // Immediately clear state for clean tab transition
+      setCalledItems([]);
+      setLastCalled(null);
+      setRemainingItems([]);
       setActiveSetKey(key);
     }
   };
@@ -158,7 +164,11 @@ export default function HostDashboard() {
               onToggleAutoCount={toggleAutoCount}
             />
 
-            <BingoDisplayViews activeSet={activeSet} lastCalled={lastCalled} />
+            <BingoDisplayViews
+              key={activeSetKey}
+              activeSet={activeSet}
+              lastCalled={lastCalled}
+            />
 
             <div className="flex gap-4">
               <button
@@ -177,7 +187,11 @@ export default function HostDashboard() {
             </div>
           </div>
 
-          <DrawHistoryPanel calledItems={calledItems} activeSet={activeSet} />
+          <DrawHistoryPanel
+            key={activeSetKey}
+            calledItems={calledItems}
+            activeSet={activeSet}
+          />
         </div>
       </div>
     </div>
