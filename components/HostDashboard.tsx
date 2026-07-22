@@ -9,16 +9,15 @@ import { DrawHistoryPanel } from "@/components/DrawHistoryPanel";
 import { AutoPickBar } from "@/components/AutoPickBar";
 import { useBingoTimer } from "@/hooks/useBingoTimer";
 
-import wordsSet from "@/data/words.json";
 import mahjongSet from "@/data/mahjong.json";
-import chineseSet from "@/data/chinese.json";
 import flagsSet from "@/data/flags.json";
+import chineseSet from "@/data/chinese.json";
 
+// Order defined as: Mahjong, Flag, Chinese (words/modern life removed)
 const GAME_DATASETS: Record<string, BingoSymbolSet> = {
-  words: wordsSet as BingoSymbolSet,
   mahjong: mahjongSet as BingoSymbolSet,
-  chinese: chineseSet as BingoSymbolSet,
   flags: flagsSet as BingoSymbolSet,
+  chinese: chineseSet as BingoSymbolSet,
 };
 
 const CALLED_PREFIX = "bingo_called_";
@@ -26,7 +25,7 @@ const CALLED_PREFIX = "bingo_called_";
 export default function HostDashboard() {
   const pageTitle = useCustomTitle("HOST BOARD");
 
-  const [activeSetKey, setActiveSetKey] = useState<string>("words");
+  const [activeSetKey, setActiveSetKey] = useState<string>("mahjong");
   const activeSet = GAME_DATASETS[activeSetKey];
 
   const [calledItems, setCalledItems] = useState<string[]>([]);
@@ -105,7 +104,6 @@ export default function HostDashboard() {
   const handleSelectTab = (key: string) => {
     if (activeSetKey !== key) {
       resetTimer();
-      // Immediately clear state for clean tab transition
       setCalledItems([]);
       setLastCalled(null);
       setRemainingItems([]);
