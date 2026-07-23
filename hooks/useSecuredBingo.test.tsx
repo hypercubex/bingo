@@ -1,5 +1,6 @@
+import React from "react";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { renderHook, act } from "@testing-library/react";
+import { render, renderHook, act } from "@testing-library/react";
 import { useSecuredBingo } from "./useSecuredBingo";
 import { BingoSymbolSet } from "@/types/bingo";
 
@@ -64,6 +65,27 @@ describe("useSecuredBingo Hook", () => {
     expect(result.current.isCheater).toBe(true);
     expect(result.current.lockoutTimeLeft).toBeGreaterThan(0);
     expect(localStorage.getItem("bingo_cheater_until_test_set")).not.toBeNull();
+  });
+
+  it("should bypass anti-cheat protections when disabled", () => {
+    const { result } = renderHook(() => useSecuredBingo(mockActiveSet, { enabled: false }));
+
+    expect(result.current.isLoaded).toBe(true);
+    expect(result.current.isCheater).toBe(false);
+    expect(result.current.card).toHaveLength(25);
+
+    act(() => {
+      result.current.toggleCell(0);
+    });
+
+    expect(result.current.selectedCells).toContain(0);
+
+    localStorage.setItem("bingo_sig_test_set", "invalid_signature");
+
+    const { result: reloaded } = renderHook(() => useSecuredBingo(mockActiveSet, { enabled: false }));
+
+    expect(reloaded.current.isCheater).toBe(false);
+    expect(reloaded.current.card).toHaveLength(25);
   });
 
   it("should enforce the 1-hour lockout expiration window", () => {
