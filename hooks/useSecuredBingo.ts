@@ -32,7 +32,12 @@ function generateSignature(items: string[], timestamp: string, salt: string): st
     .join("");
 }
 
-export function useSecuredBingo(activeSet: BingoSymbolSet) {
+export interface UseSecuredBingoOptions {
+  enabled?: boolean;
+}
+
+export function useSecuredBingo(activeSet: BingoSymbolSet, options: UseSecuredBingoOptions = {}) {
+  const { enabled = true } = options;
   const [card, setCard] = useState<string[]>([]);
   const [selectedCells, setSelectedCells] = useState<number[]>([]);
   const [isCheater, setIsCheater] = useState<boolean>(false);
@@ -62,6 +67,37 @@ export function useSecuredBingo(activeSet: BingoSymbolSet) {
 
   useEffect(() => {
     if (typeof window === "undefined") { return; }
+
+    if (!enabled) {
+      const savedCard = localStorage.getItem(cacheKey);
+      let parsedCard: string[] = [];
+
+      if (savedCard) {
+        try {
+          parsedCard = JSON.parse(savedCard);
+        } catch {
+          parsedCard = [];
+        }
+      }
+
+      if (parsedCard.length === GRID_SIZE) {
+        setCard(parsedCard);
+      } else {
+        const itemsToShuffle = activeSet.markers || [];
+        const shuffled = [...itemsToShuffle]
+          .sort(() => 0.5 - Math.random())
+          .slice(0, GRID_SIZE);
+
+        localStorage.setItem(cacheKey, JSON.stringify(shuffled));
+        setCard(shuffled);
+      }
+
+      loadSelections();
+      setIsLoaded(true);
+      setIsCheater(false);
+      setLockoutTimeLeft(0);
+      return;
+    }
 
     const remainingTime = getLockoutRemaining();
     if (remainingTime > 0) {
@@ -129,10 +165,10 @@ export function useSecuredBingo(activeSet: BingoSymbolSet) {
     setSelectedCells([]);
     localStorage.removeItem(selectionKey);
     setIsLoaded(true);
-  }, [activeSet]);
+  }, [activeSet, enabled]);
 
   useEffect(() => {
-    if (!isCheater || lockoutTimeLeft <= 0) { return; }
+    if (!enabled || !isCheater || lockoutTimeLeft <= 0) { return; }
 
     const interval = setInterval(() => {
       const remaining = getLockoutRemaining();
@@ -151,7 +187,7 @@ export function useSecuredBingo(activeSet: BingoSymbolSet) {
 
   // Anti-Cheat Mutation Observer
   useEffect(() => {
-    if (!boardRef.current || isCheater || card.length !== GRID_SIZE) { return; }
+    if (!enabled || !boardRef.current || isCheater || card.length !== GRID_SIZE) { return; }
 
     const targetNode = boardRef.current;
 
@@ -216,6 +252,18 @@ export function useSecuredBingo(activeSet: BingoSymbolSet) {
 
   const toggleCell = (index: number): void => {
     if (isCheater) { return; }
+
+    if (!enabled) {
+      let updated: number[];
+      if (selectedCells.includes(index)) {
+        updated = selectedCells.filter((i) => i !== index);
+      } else {
+        updated = [...selectedCells, index];
+      }
+      setSelectedCells(updated);
+      localStorage.setItem(selectionKey, JSON.stringify(updated));
+      return;
+    }
 
     const savedCard = localStorage.getItem(cacheKey);
     const savedTime = localStorage.getItem(cacheTimeKey);
