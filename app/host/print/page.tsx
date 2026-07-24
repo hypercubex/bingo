@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import PrintableBingoBoard from "@/components/PrintableBingoBoard";
 import wordsSet from "@/data/words.json";
@@ -23,7 +23,7 @@ const themeOptions = [
   { value: "mahjong", label: "Mahjong" },
 ];
 
-export default function PrintPage() {
+function PrintPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -41,7 +41,9 @@ export default function PrintPage() {
     setDifferentCopies(nextDifferent);
   }, [searchParams]);
 
-  const activeSet = useMemo(() => themeMap[type] || themeMap.words, [type]);
+  const activeSet = useMemo(() => {
+    return themeMap[type] || themeMap.words;
+  }, [type]);
 
   const updateQuery = (nextType: string, nextCopies: number, nextDifferent: boolean) => {
     const params = new URLSearchParams();
@@ -117,7 +119,9 @@ export default function PrintPage() {
 
         <button
           type="button"
-          onClick={() => window.print()}
+          onClick={() => {
+            window.print();
+          }}
           className="rounded border border-black bg-black px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.3em] text-white"
         >
           Print
@@ -130,5 +134,13 @@ export default function PrintPage() {
         differentCopies={differentCopies}
       />
     </div>
+  );
+}
+
+export default function PrintPage() {
+  return (
+    <Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
+      <PrintPageContent />
+    </Suspense>
   );
 }
